@@ -841,7 +841,7 @@
             }
             if (!installPrompt) {
                 const appAddress = window.location.origin === 'null' ? API_BASE : window.location.origin;
-                const secureMessage = window.isSecureContext ? `Refresh ${appAddress} once, then use Chrome or Edge.` : `This address is HTTP, so install is blocked. Open the HTTPS public address from start-app.ps1 -Public instead.`;
+                const secureMessage = window.isSecureContext ? `Refresh ${appAddress} once, then use Chrome or Edge.` : `This LAN address is HTTP, so install is blocked. On this computer open http://localhost:8000, or use the HTTPS link from start-app.ps1 -Public on another device.`;
                 alert(`${secureMessage} On phone, choose Add to home screen.`);
                 return;
             }

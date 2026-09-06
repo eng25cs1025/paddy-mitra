@@ -27,7 +27,8 @@ $lanIp = (Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue |
     Select-Object -First 1 -ExpandProperty IPAddress)
 $appHost = if ($lanIp) { $lanIp } else { $env:COMPUTERNAME }
 $appUrl = "http://$appHost`:$port/"
-$openUrl = $appUrl
+$installUrl = "http://localhost:$port/"
+$openUrl = $installUrl
 $existing = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
 $shouldOpenBrowser = $false
 if ($existing) {
@@ -49,6 +50,7 @@ else {
 }
 
 Write-Host "App URL (same Wi-Fi): $appUrl" -ForegroundColor Green
+Write-Host "Install URL (this computer): $installUrl" -ForegroundColor Green
 Write-Host "Local IP address: $lanIp" -ForegroundColor Cyan
 Write-Host "Computer host name: $env:COMPUTERNAME" -ForegroundColor Cyan
 if ($Public) {
