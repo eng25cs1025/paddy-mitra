@@ -5,6 +5,7 @@ import json
 import os
 import secrets
 import hashlib
+import hmac
 import threading
 import socket
 import time
@@ -21,6 +22,10 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 USERS_FILE = DATA_DIR / "users.json"
 USERS_LOCK = threading.Lock()
 SESSIONS = set()
+LOGIN_ATTEMPTS = {}
+LOGIN_ATTEMPTS_LOCK = threading.Lock()
+MAX_LOGIN_ATTEMPTS = 5
+LOGIN_WINDOW_SECONDS = 15 * 60
 FIELD_STATE = {
     "district": "Mandya",
     "water_level_cm": 3.2,
@@ -109,6 +114,43 @@ def password_hash(password):
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
 
+def secure_password_hash(password):
+    salt = secrets.token_bytes(16)
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 310_000)
+    return f"pbkdf2_sha256$310000${salt.hex()}${digest.hex()}"
+
+
+def verify_password(password, stored_hash):
+    if stored_hash.startswith("pbkdf2_sha256$"):
+        try:
+            algorithm, iterations, salt_hex, digest_hex = stored_hash.split("$", 3)
+            candidate = hashlib.pbkdf2_hmac(
+                "sha256", password.encode("utf-8"), bytes.fromhex(salt_hex), int(iterations)
+            ).hex()
+            return algorithm == "pbkdf2_sha256" and hmac.compare_digest(candidate, digest_hex)
+        except (ValueError, TypeError):
+            return False
+    return hmac.compare_digest(password_hash(password), stored_hash)
+
+
+def login_allowed(address):
+    now = time.time()
+    with LOGIN_ATTEMPTS_LOCK:
+        attempts = [stamp for stamp in LOGIN_ATTEMPTS.get(address, []) if now - stamp < LOGIN_WINDOW_SECONDS]
+        LOGIN_ATTEMPTS[address] = attempts
+        return len(attempts) < MAX_LOGIN_ATTEMPTS
+
+
+def record_login_failure(address):
+    with LOGIN_ATTEMPTS_LOCK:
+        LOGIN_ATTEMPTS.setdefault(address, []).append(time.time())
+
+
+def clear_login_failures(address):
+    with LOGIN_ATTEMPTS_LOCK:
+        LOGIN_ATTEMPTS.pop(address, None)
+
+
 def load_users():
     configured_user = os.environ.get("PADDY_USER")
     configured_password = os.environ.get("PADDY_PASSWORD")
@@ -116,11 +158,11 @@ def load_users():
         try:
             users = json.loads(USERS_FILE.read_text(encoding="utf-8"))
             if configured_user and configured_password:
-                users[configured_user] = {"password_hash": password_hash(configured_password), "name": "Farmer"}
+                users[configured_user] = {"password_hash": secure_password_hash(configured_password), "name": "Farmer"}
             return users
         except (json.JSONDecodeError, OSError):
             pass
-    return {LOGIN_USER: {"password_hash": password_hash(LOGIN_PASSWORD), "name": "Ravi"}}
+    return {LOGIN_USER: {"password_hash": secure_password_hash(LOGIN_PASSWORD), "name": "Ravi"}}
 
 
 def save_users(users):
@@ -295,13 +337,25 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 self.send_json({"error": "Username and password are required"}, 400)
                 return
             user = USERS.get(username)
-            if not user or user["password_hash"] != password_hash(password):
+            client_address = self.client_address[0]
+            if not login_allowed(client_address):
+                self.send_json({"error": "Too many login attempts. Try again later."}, 429,
+                               {"Retry-After": str(LOGIN_WINDOW_SECONDS)})
+                return
+            if not user or not verify_password(password, user["password_hash"]):
+                record_login_failure(client_address)
                 self.send_json({"error": "Invalid username or password"}, 401)
                 return
+            clear_login_failures(client_address)
+            if not user["password_hash"].startswith("pbkdf2_sha256$"):
+                with USERS_LOCK:
+                    user["password_hash"] = secure_password_hash(password)
+                    save_users(USERS)
             token = secrets.token_urlsafe(32)
             SESSIONS.add(token)
+            secure_cookie = "; Secure" if self.is_https_request() else ""
             self.send_json({"status": "ok", "redirect": "/dashboard"}, 200,
-                           {"Set-Cookie": f"paddy_session={token}; HttpOnly; SameSite=Lax; Path=/"})
+                           {"Set-Cookie": f"paddy_session={token}; HttpOnly; SameSite=Lax; Path=/{secure_cookie}"})
             return
         if path == "/api/register":
             try:
@@ -321,7 +375,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 if username in USERS:
                     self.send_json({"error": "Username already exists"}, 409)
                     return
-                USERS[username] = {"password_hash": password_hash(password), "name": name}
+                USERS[username] = {"password_hash": secure_password_hash(password), "name": name}
                 save_users(USERS)
             self.send_json({"status": "ok", "redirect": "/"})
             return
@@ -410,11 +464,19 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
     def end_headers(self):
         origin = self.headers.get("Origin")
-        self.send_header("Access-Control-Allow-Origin", origin or "*")
-        if origin:
+        host = self.headers.get("Host", "")
+        if origin and urllib.parse.urlparse(origin).netloc == host:
+            self.send_header("Access-Control-Allow-Origin", origin)
             self.send_header("Access-Control-Allow-Credentials", "true")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
+        self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'")
+        if self.is_https_request():
+            self.send_header("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
         super().end_headers()
 
     def do_OPTIONS(self):
@@ -431,6 +493,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
     def is_authenticated(self):
         return self.session_token() in SESSIONS
+
+    def is_https_request(self):
+        return self.headers.get("X-Forwarded-Proto", "").lower() == "https" or self.requestline.startswith("GET https://")
 
     def redirect(self, location):
         self.send_response(302)
