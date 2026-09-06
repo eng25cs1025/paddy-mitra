@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'paddy-mitra-static-v2';
+const STATIC_CACHE = 'paddy-mitra-static-v3';
 const STATIC_FILES = ['/login.html', '/register.html', '/dashboard.html', '/paddy-mitra-logo.svg', '/icon-192.svg', '/icon-512.svg', '/manifest.json'];
 
 self.addEventListener('install', event => {

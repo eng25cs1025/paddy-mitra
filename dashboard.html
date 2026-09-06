@@ -155,7 +155,7 @@
         }
 
         .install-button {
-            display: inline-block;
+            display: none;
             border: 0;
             border-radius: 9px;
             padding: 8px 10px;
@@ -841,7 +841,7 @@
             }
             if (!installPrompt) {
                 const appAddress = window.location.origin === 'null' ? API_BASE : window.location.origin;
-                const secureMessage = window.isSecureContext ? `Refresh ${appAddress} once, then use Chrome or Edge.` : `This LAN address is HTTP, so install is blocked. On this computer open http://localhost:8000, or use the HTTPS link from start-app.ps1 -Public on another device.`;
+                const secureMessage = window.isSecureContext ? `Refresh ${appAddress} once, then use Chrome or Edge, or choose Install app from the browser menu.` : `This LAN address is HTTP, so install is blocked. Open the HTTPS link printed by start-app.ps1 -Public on your phone, then choose Add to home screen.`;
                 alert(`${secureMessage} On phone, choose Add to home screen.`);
                 return;
             }
