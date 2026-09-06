@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: paddy-mitra
+    runtime: python
+    plan: free
+    buildCommand: "python -m py_compile server.py"
+    startCommand: "python server.py"
+    healthCheckPath: /api/health
+    envVars:
+      - key: PADDY_USER
+        value: farmer
+      - key: PADDY_PASSWORD
+        generateValue: true
+      - key: PADDY_HOST
+        value: 0.0.0.0
+      - key: PADDY_DATA_DIR
+        value: /tmp/paddy-mitra-data

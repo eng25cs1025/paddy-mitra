@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Paddy Mitra</title>
+    <link rel="icon" type="image/svg+xml" href="/paddy-mitra-logo.svg">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        :root {
+            --green: #237b4b;
+            --dark: #17342b;
+            --muted: #718078;
+            --line: #e1eae1;
+            --bg: #f5faf4
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #edf8ed, #fdfcf7);
+            color: var(--dark);
+            font: 14px system-ui, sans-serif
+        }
+
+        .login {
+            width: min(420px, calc(100% - 30px));
+            padding: 34px;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: #fff;
+            box-shadow: 0 20px 50px #225d3214
+        }
+
+        .brand {
+            text-align: center
+        }
+
+        .brand img {
+            width: 72px;
+            height: 72px
+        }
+
+        .brand h1 {
+            margin: 12px 0 3px;
+            font-size: 27px;
+            letter-spacing: -1px
+        }
+
+        .brand p {
+            margin: 0;
+            color: var(--muted)
+        }
+
+        form {
+            margin-top: 30px
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 7px;
+            font-weight: 700;
+            font-size: 12px
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            outline: none;
+            font: inherit
+        }
+
+        input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px #237b4b18
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 13px;
+            border: 0;
+            border-radius: 9px;
+            color: #fff;
+            background: var(--green);
+            font-weight: 800;
+            cursor: pointer
+        }
+
+        button:hover {
+            background: #145b38
+        }
+
+        .error {
+            display: none;
+            margin-top: 14px;
+            padding: 10px;
+            border-radius: 8px;
+            color: #a32f25;
+            background: #fff0ed;
+            font-size: 12px
+        }
+
+        .hint {
+            margin-top: 19px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5
+        }
+
+        .languages {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px
+        }
+    </style>
+</head>
+
+<body>
+    <main class="login">
+        <div class="brand"><img src="/paddy-mitra-logo.svg" alt="Paddy Mitra logo">
+            <h1>Paddy Mitra</h1>
+            <p>Smart water & crop health assistant</p>
+            <p>ಪಾಡಿ ಮಿತ್ರ · धान मित्र</p>
+        </div>
+        <form id="loginForm">
+            <label for="username">Username</label><input id="username" autocomplete="username" required
+                placeholder="Enter username">
+            <label for="password">Password</label><input id="password" type="password" autocomplete="current-password"
+                required placeholder="Enter password">
+            <button type="submit">Login to dashboard →</button>
+            <div class="error" id="error"></div>
+        </form>
+        <div class="hint">Demo login: <b>ravi</b> / <b>paddy123</b><br>Change these using PADDY_USER and PADDY_PASSWORD
+            environment variables.</div>
+        <div style="margin-top:18px;text-align:center;font-size:12px"><a href="/register"
+                style="color:#237b4b;font-weight:700;text-decoration:none">New farmer? Create an account →</a></div>
+        <div class="languages">English · ಕನ್ನಡ · हिन्दी</div>
+    </main>
+    <script>
+        const API_BASE = '';
+        if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+            navigator.serviceWorker.register('/sw.js').catch(error => console.warn('Offline app setup unavailable:', error));
+        }
+        document.getElementById('loginForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            const error = document.getElementById('error');
+            error.style.display = 'none';
+            try {
+                const response = await fetch(API_BASE + '/api/login', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: document.getElementById('username').value.trim(), password: document.getElementById('password').value }) });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Login failed');
+                window.location.href = window.location.protocol === 'file:' ? API_BASE + data.redirect : data.redirect;
+            } catch (err) {
+                error.textContent = err.message;
+                error.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

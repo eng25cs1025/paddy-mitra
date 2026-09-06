@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Paddy Mitra logo</title>
+  <desc id="desc">A green rice plant above blue water waves inside a rounded square.</desc>
+  <defs>
+    <linearGradient id="field" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2d925b"/>
+      <stop offset="1" stop-color="#145b38"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#76c7d1"/>
+      <stop offset="1" stop-color="#2f82a4"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="34" fill="url(#field)"/>
+  <circle cx="93" cy="30" r="14" fill="#f6d27b" opacity=".95"/>
+  <path d="M25 91c12-8 24-8 36 0s24 8 42 0" fill="none" stroke="url(#water)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M25 105c12-8 24-8 36 0s24 8 42 0" fill="none" stroke="#b4e2dd" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+  <path d="M61 91c-4-25-3-45 7-62" fill="none" stroke="#f8e6a8" stroke-width="5" stroke-linecap="round"/>
+  <path d="M66 45c-12-4-20-11-22-20 12 0 22 5 27 13M66 55c-12-2-21-8-25-16 12-1 22 2 29 10M67 66c-11-1-20-5-26-12 11-3 22-1 29 6M70 37c7-8 15-12 24-12-2 10-10 17-21 20M68 50c8-6 16-8 25-6-4 9-11 13-24 14M67 63c8-4 17-4 25 0-5 8-14 10-25 8" fill="none" stroke="#f8e6a8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M29 77c8-8 17-11 28-9" fill="none" stroke="#d7f0bd" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+</svg>

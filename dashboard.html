@@ -1,0 +1,1256 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paddy Mitra Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/paddy-mitra-logo.svg">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        :root {
+            --green: #237b4b;
+            --dark: #17342b;
+            --muted: #718078;
+            --bg: #f8faf5;
+            --line: #e3ebe2;
+            --blue: #4285a8;
+            --amber: #f4b63e
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--dark);
+            font: 14px system-ui, sans-serif
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh
+        }
+
+        aside {
+            width: 235px;
+            background: #fff;
+            border-right: 1px solid var(--line);
+            padding: 25px 17px
+        }
+
+        .brand {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 0 10px 35px
+        }
+
+        .logo {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 13px;
+            overflow: hidden;
+            background: var(--green)
+        }
+
+        .logo img {
+            display: block;
+            width: 100%;
+            height: 100%
+        }
+
+        .brand b {
+            display: block
+        }
+
+        .brand small {
+            color: var(--muted)
+        }
+
+        nav {
+            display: grid;
+            gap: 7px
+        }
+
+        nav button {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px;
+            color: var(--muted);
+            background: transparent;
+            text-align: left
+        }
+
+        nav button.active,
+        nav button:hover {
+            color: var(--green);
+            background: #e7f4e9;
+            font-weight: bold
+        }
+
+        .help {
+            margin-top: 45vh;
+            padding: 15px;
+            border-radius: 13px;
+            background: #f0f7ef;
+            font-size: 12px
+        }
+
+        .help button,
+        .expert {
+            border: 0;
+            border-radius: 8px;
+            padding: 9px;
+            color: var(--green);
+            background: white;
+            font-weight: bold
+        }
+
+        main {
+            width: 100%;
+            max-width: 1400px;
+            margin: auto;
+            padding: 27px 34px
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px
+        }
+
+        .eyebrow {
+            margin: 0 0 5px;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 31px;
+            letter-spacing: -1px
+        }
+
+        .location {
+            color: var(--muted)
+        }
+
+        .language-select {
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            padding: 8px 10px;
+            color: var(--dark);
+            background: #fff;
+            font-size: 12px;
+            font-weight: 600
+        }
+
+        .install-button {
+            display: inline-block;
+            border: 0;
+            border-radius: 9px;
+            padding: 8px 10px;
+            color: #fff;
+            background: var(--green);
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .feature-panel {
+            display: none;
+            margin-top: 18px;
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: #fff
+        }
+
+        .feature-panel.visible {
+            display: block
+        }
+
+        .feature-panel h3 {
+            margin: 0 0 6px
+        }
+
+        .feature-panel p {
+            margin: 6px 0;
+            color: var(--muted)
+        }
+
+        .feature-panel button {
+            margin-top: 10px;
+            border: 0;
+            border-radius: 8px;
+            padding: 9px 12px;
+            color: #fff;
+            background: var(--green);
+            font-weight: bold
+        }
+
+        .district-select {
+            max-width: 155px;
+            margin-left: 5px
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            padding: 28px;
+            border-radius: 20px;
+            color: #fff;
+            background: linear-gradient(110deg, #19673e, #408f5c);
+            box-shadow: 0 14px 30px #1c5b3220
+        }
+
+        .hero h2 {
+            max-width: 600px;
+            margin: 0 0 8px;
+            font-size: 28px
+        }
+
+        .hero p {
+            color: #d9efdd
+        }
+
+        .hero span {
+            font-size: 75px
+        }
+
+        .heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 28px 0 14px
+        }
+
+        .heading h2 {
+            font-size: 18px;
+            margin: 0
+        }
+
+        .heading a {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: bold
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            padding: 18px;
+            background: #fff;
+            box-shadow: 0 7px 20px #1c3c2708
+        }
+
+        .metric {
+            min-height: 125px
+        }
+
+        .metric label {
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .metric strong {
+            display: block;
+            margin: 15px 0 5px;
+            font-size: 25px
+        }
+
+        .good {
+            color: var(--green);
+            font-size: 11px;
+            font-weight: bold
+        }
+
+        .twocol {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 15px
+        }
+
+        .operations {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr .9fr;
+            gap: 15px
+        }
+
+        .instruction-list {
+            display: grid;
+            gap: 11px;
+            margin-top: 17px
+        }
+
+        .instruction {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 10px;
+            border-radius: 10px;
+            background: #f5faf4;
+            font-size: 12px
+        }
+
+        .instruction-number {
+            display: grid;
+            place-items: center;
+            flex: 0 0 23px;
+            width: 23px;
+            height: 23px;
+            border-radius: 50%;
+            color: #fff;
+            background: var(--green);
+            font-size: 11px;
+            font-weight: bold
+        }
+
+        .instruction p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .borewell-card {
+            background: linear-gradient(145deg, #fff, #f5fbf8)
+        }
+
+        .borewell-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0 16px;
+            padding: 14px;
+            border-radius: 12px;
+            background: #eef7f0
+        }
+
+        .power-dot {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #9aa69d;
+            box-shadow: 0 0 0 5px #dfe8e1
+        }
+
+        .borewell-status.on .power-dot {
+            background: #29a65a;
+            box-shadow: 0 0 0 5px #ccebd5
+        }
+
+        .borewell-status strong {
+            display: block;
+            font-size: 13px
+        }
+
+        .borewell-status small {
+            color: var(--muted)
+        }
+
+        .pump-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px
+        }
+
+        .pump-buttons button {
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            padding: 11px;
+            color: var(--muted);
+            background: #fff;
+            font-weight: bold
+        }
+
+        .pump-buttons button.active {
+            border-color: var(--green);
+            color: #fff;
+            background: var(--green)
+        }
+
+        .safety-note {
+            margin: 14px 0 0;
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.45
+        }
+
+        .cardhead {
+            display: flex;
+            justify-content: space-between;
+            align-items: start
+        }
+
+        .card h3 {
+            margin: 0 0 4px;
+            font-size: 16px
+        }
+
+        .sub {
+            margin: 0;
+            color: var(--muted);
+            font-size: 11px
+        }
+
+        .status {
+            border-radius: 15px;
+            padding: 6px 9px;
+            color: var(--green);
+            background: #e7f4e9;
+            font-size: 10px;
+            font-weight: bold
+        }
+
+        .water {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-top: 25px
+        }
+
+        .ring {
+            display: grid;
+            place-items: center;
+            width: 145px;
+            height: 145px;
+            border-radius: 50%;
+            background: conic-gradient(var(--blue) 0 64%, #eaf0f0 64%);
+            position: relative
+        }
+
+        .ring:before {
+            content: "";
+            position: absolute;
+            width: 112px;
+            height: 112px;
+            border-radius: 50%;
+            background: #fff
+        }
+
+        .ring div {
+            position: relative;
+            text-align: center
+        }
+
+        .ring b {
+            display: block;
+            font-size: 28px
+        }
+
+        .ring small {
+            color: var(--muted)
+        }
+
+        .facts {
+            flex: 1
+        }
+
+        .facts p {
+            display: flex;
+            justify-content: space-between;
+            padding: 9px 0;
+            border-bottom: 1px solid #f0f2ee;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .facts b {
+            color: var(--dark)
+        }
+
+        .bars {
+            display: flex;
+            align-items: end;
+            gap: 12px;
+            height: 170px;
+            margin-top: 18px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .barwrap {
+            display: flex;
+            flex: 1;
+            height: 100%;
+            flex-direction: column;
+            justify-content: end;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 10px
+        }
+
+        .bar {
+            width: 80%;
+            max-width: 30px;
+            border-radius: 6px 6px 0 0;
+            background: #9dcdb1
+        }
+
+        .bar.today {
+            background: var(--green)
+        }
+
+        .lower {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px
+        }
+
+        .stage {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 17px 0
+        }
+
+        .dot {
+            display: grid;
+            place-items: center;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            color: #fff;
+            background: var(--green);
+            font-size: 11px
+        }
+
+        .stage small {
+            margin-left: auto;
+            color: var(--green)
+        }
+
+        .alert {
+            display: flex;
+            gap: 10px;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            background: #fff8e7;
+            font-size: 12px
+        }
+
+        .alert.red {
+            background: #fff0ed
+        }
+
+        .alert p {
+            margin: 4px 0;
+            color: var(--muted);
+            font-size: 11px
+        }
+
+        @media(max-width:900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .twocol,
+            .lower,
+            .operations {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:650px) {
+            aside {
+                display: none
+            }
+
+            main {
+                padding: 18px 14px
+            }
+
+            .hero span {
+                display: none
+            }
+
+            .hero h2 {
+                font-size: 22px
+            }
+
+            .grid {
+                gap: 9px
+            }
+
+            .metric {
+                padding: 13px
+            }
+
+            .metric strong {
+                font-size: 20px
+            }
+
+            .water {
+                flex-direction: column
+            }
+
+            .water .facts {
+                width: 100%
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <aside>
+            <div class="brand">
+                <div class="logo"><img src="/paddy-mitra-logo.svg" alt="Paddy Mitra logo"></div>
+                <div><b>Paddy Mitra</b><small>ಪಾಡಿ ಮಿತ್ರ</small></div>
+            </div>
+            <nav><button class="active" data-feature="overview">⌂ &nbsp; Overview</button><button
+                    data-feature="water-manager">💧 &nbsp; Water Manager</button><button data-feature="paddy-doctor">🩺
+                    &nbsp; Paddy Doctor</button><button data-feature="weather">☁ &nbsp; Weather</button><button
+                    data-feature="calendar">📅 &nbsp; Crop
+                    Calendar</button><button data-feature="settings">⚙ &nbsp; Settings</button></nav>
+            <div class="help"><b>Need expert help?</b>
+                <p>Connect with a verified agronomist.</p><button id="expertHelpButton" type="button">Ask an expert
+                    →</button>
+            </div>
+        </aside>
+        <main>
+            <header class="top">
+                <div>
+                    <p class="eyebrow" id="currentDate">Loading date…</p>
+                    <h1>Good morning, Ravi 👋</h1>
+                </div>
+                <div class="location"><label for="languageSelect">🌐</label> <select id="languageSelect"
+                        class="language-select" aria-label="Select language">
+                        <option value="en">English</option>
+                        <option value="kn">ಕನ್ನಡ</option>
+                        <option value="hi">हिन्दी</option>
+                    </select><button id="installButton" class="install-button" type="button">⬇ Install
+                        app</button><label for="districtSelect">📍</label><select id="districtSelect"
+                        class="language-select district-select" aria-label="Select Karnataka district"></select> &nbsp;
+                    🔔 &nbsp; <b>R</b></div>
+            </header>
+            <section class="hero">
+                <div>
+                    <p class="eyebrow" style="color:#bce8c4">YOUR FIELD TODAY</p>
+                    <h2>Your crop is looking healthy. Keep the water steady.</h2>
+                    <p>Flowering starts in 12 days · Next field check recommended tomorrow</p>
+                </div><span>🌱</span>
+            </section>
+            <section class="feature-panel" id="featurePanel" aria-live="polite">
+                <h3 id="featureTitle">Feature details</h3>
+                <p id="featureContent">Choose a dashboard section to load its latest information.</p>
+                <button id="expertRequestButton" type="button" hidden>Request verified agronomist</button>
+            </section>
+            <div class="heading">
+                <h2>Field overview</h2><a href="#">View field details →</a>
+            </div>
+            <section class="grid">
+                <article class="card metric"><label>Water level</label><strong>3.2 cm</strong><span class="good">●
+                        Optimal for today</span></article>
+                <article class="card metric"><label>Crop stage</label><strong>Tillering</strong><span class="good">Day
+                        38 of 120</span></article>
+                <article class="card metric"><label>Next rain</label><strong id="nextRainValue">Loading…</strong><span
+                        class="good" id="nextRainDetails">Checking live conditions…</span></article>
+                <article class="card metric"><label>Field health</label><strong>Good</strong><span class="good">No
+                        issues detected</span></article>
+            </section>
+            <div class="heading">
+                <h2>Smart water manager</h2><a href="#">Open controls →</a>
+            </div>
+            <section class="twocol">
+                <article class="card">
+                    <div class="cardhead">
+                        <div>
+                            <h3>Live water level</h3>
+                            <p class="sub">Last updated 8 minutes ago</p>
+                        </div><span class="status">● AUTOMATIC</span>
+                    </div>
+                    <div class="water">
+                        <div class="ring">
+                            <div><b>3.2</b><small>centimetres</small></div>
+                        </div>
+                        <div class="facts">
+                            <p><span>Recommended</span><b>2–5 cm</b></p>
+                            <p><span>Pump status</span><b style="color:var(--green)">OFF</b></p>
+                            <p><span>Next check</span><b>In 2 hours</b></p>
+                            <p><span>Automatic control</span><b style="color:var(--green)">ON</b></p>
+                        </div>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="cardhead">
+                        <div>
+                            <h3>Water usage</h3>
+                            <p class="sub">Last 7 days · litres per day</p>
+                        </div><span class="good">−18% ↓</span>
+                    </div>
+                    <div class="bars">
+                        <div class="barwrap"><i class="bar" style="height:58%"></i>Mon</div>
+                        <div class="barwrap"><i class="bar" style="height:76%"></i>Tue</div>
+                        <div class="barwrap"><i class="bar" style="height:45%"></i>Wed</div>
+                        <div class="barwrap"><i class="bar" style="height:68%"></i>Thu</div>
+                        <div class="barwrap"><i class="bar" style="height:54%"></i>Fri</div>
+                        <div class="barwrap"><i class="bar today" style="height:34%"></i>Today</div>
+                    </div>
+                </article>
+            </section>
+            <div class="heading">
+                <h2 id="operationsHeading">Field instructions & controls</h2><a href="#">Safety first</a>
+            </div>
+            <section class="operations">
+                <article class="card">
+                    <div class="cardhead">
+                        <div>
+                            <h3 id="instructionsTitle">Irrigation instructions</h3>
+                            <p class="sub" id="instructionsSub">Simple steps for healthy paddy</p>
+                        </div>💡
+                    </div>
+                    <div class="instruction-list">
+                        <div class="instruction"><span class="instruction-number">1</span>
+                            <p id="instructionOne"><b>After transplanting:</b> Keep 2–3 cm water during the first week.
+                            </p>
+                        </div>
+                        <div class="instruction"><span class="instruction-number">2</span>
+                            <p id="instructionTwo"><b>Vegetative stage:</b> Maintain about 5 cm and allow safe drying
+                                when suitable.</p>
+                        </div>
+                        <div class="instruction"><span class="instruction-number">3</span>
+                            <p id="instructionThree"><b>Flowering:</b> Do not allow water stress; check the field daily.
+                            </p>
+                        </div>
+                        <div class="instruction"><span class="instruction-number">4</span>
+                            <p id="instructionFour"><b>Before harvest:</b> Drain the field completely 10 days before
+                                harvest.</p>
+                        </div>
+                    </div>
+                </article>
+                <article class="card borewell-card">
+                    <div class="cardhead">
+                        <div>
+                            <h3 id="borewellTitle">Borewell control</h3>
+                            <p class="sub" id="borewellSub">Manual override for irrigation pump</p>
+                        </div>⚙️
+                    </div>
+                    <div class="borewell-status" id="borewellStatus">
+                        <span class="power-dot"></span>
+                        <div><strong id="borewellState">Borewell is OFF</strong><small id="borewellMessage">Pump stopped
+                                · safe to inspect</small></div>
+                    </div>
+                    <div class="pump-buttons"><button id="borewellOn" type="button">▶ Turn ON</button><button
+                            id="borewellOff" class="active" type="button">■ Turn OFF</button></div>
+                    <p class="safety-note" id="borewellSafety">⚠ Use ON only when water level is below target. Never run
+                        the pump dry. Keep the manual switch OFF during maintenance.</p>
+                </article>
+                <article class="card borewell-card">
+                    <div class="cardhead">
+                        <div>
+                            <h3 id="aiTitle">AI disease detection</h3>
+                            <p class="sub" id="aiSub">Automatic photo scanning for crop health</p>
+                        </div>🩺
+                    </div>
+                    <div class="borewell-status" id="aiStatus">
+                        <span class="power-dot"></span>
+                        <div><strong id="aiState">AI detection is OFF</strong><small id="aiMessage">Turn on before
+                                taking a crop photo</small></div>
+                    </div>
+                    <div class="pump-buttons"><button id="aiOn" type="button">▶ Turn ON</button><button id="aiOff"
+                            class="active" type="button">■ Turn OFF</button></div>
+                    <p class="safety-note" id="aiSafety">⚠ AI suggestions are only a first check. Confirm disease or
+                        pest symptoms with a qualified agronomist before treatment.</p>
+                </article>
+            </section>
+            <div class="heading">
+                <h2>Crop plan & alerts</h2><a href="#">See calendar →</a>
+            </div>
+            <section class="lower">
+                <article class="card">
+                    <div class="cardhead">
+                        <div>
+                            <h3>Kharif crop calendar</h3>
+                            <p class="sub" id="calendarLocation">Mandya · Sona Masuri</p>
+                        </div><span class="status">ON TRACK</span>
+                    </div>
+                    <div class="stage"><span class="dot">✓</span>
+                        <div><b>Nursery preparation</b><br><small>May 20 – June 05</small></div><small>Done</small>
+                    </div>
+                    <div class="stage"><span class="dot">✓</span>
+                        <div><b>Transplanting</b><br><small>June 18 – June 25</small></div><small>Done</small>
+                    </div>
+                    <div class="stage"><span class="dot">●</span>
+                        <div><b>Tillering</b><br><small>July 12 – August 28</small></div><small>Now</small>
+                    </div>
+                    <div class="stage"><span class="dot" style="background:#eef1eb;color:#718078">4</span>
+                        <div><b>Flowering</b><br><small>September 17 – October 02</small></div><small>Next</small>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="cardhead">
+                        <div>
+                            <h3>Today's advisories</h3>
+                            <p class="sub">Personalised for your crop stage</p>
+                        </div>🔔
+                    </div>
+                    <div class="alert">🌧️<div><b>Rain expected tomorrow</b>
+                            <p>Delay irrigation and save approximately 2,000 litres.</p>
+                        </div>
+                    </div>
+                    <div class="alert red">🔎<div><b>Scout for leaf blast</b>
+                            <p>Check lower leaves after rainfall.</p>
+                        </div>
+                    </div>
+                    <div class="alert">🌱<div><b>Keep nitrogen balanced</b>
+                            <p>Excess nitrogen can increase disease pressure.</p>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+    <script>
+        const API_BASE = '';
+        const apiUrl = path => API_BASE + path;
+        let dailyAdvisories = null;
+        let installPrompt = null;
+        const installButton = document.getElementById('installButton');
+        const isInstalledApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        if (isInstalledApp) {
+            installButton.style.display = 'none';
+        }
+
+        window.addEventListener('beforeinstallprompt', event => {
+            event.preventDefault();
+            installPrompt = event;
+            installButton.style.display = 'inline-block';
+            installButton.textContent = '⬇ Install app';
+        });
+
+        installButton.addEventListener('click', async () => {
+            if (isInstalledApp) {
+                alert('Paddy Mitra is already installed. Open it from your Android home screen.');
+                return;
+            }
+            if (!installPrompt) {
+                const appAddress = window.location.origin === 'null' ? API_BASE : window.location.origin;
+                const secureMessage = window.isSecureContext ? `Refresh ${appAddress} once, then use Chrome or Edge.` : `This address is HTTP, so install is blocked. Open the HTTPS public address from start-app.ps1 -Public instead.`;
+                alert(`${secureMessage} On phone, choose Add to home screen.`);
+                return;
+            }
+            installPrompt.prompt();
+            await installPrompt.userChoice;
+            installPrompt = null;
+            document.getElementById('installButton').style.display = 'none';
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installButton.style.display = 'none';
+        });
+
+        if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => navigator.serviceWorker.ready)
+                .catch(error => console.warn('Offline app setup unavailable:', error));
+        }
+
+        const translations = {
+            en: {
+                nav: ['⌂ &nbsp; Overview', '💧 &nbsp; Water Manager', '🩺 &nbsp; Paddy Doctor', '☁ &nbsp; Weather', '📅 &nbsp; Crop Calendar', '⚙ &nbsp; Settings'],
+                helpTitle: 'Need expert help?', helpText: 'Connect with a verified agronomist.', helpButton: 'Ask an expert →',
+                greeting: 'Good morning, Ravi 👋', field: 'YOUR FIELD TODAY', hero: 'Your crop is looking healthy. Keep the water steady.', heroSub: 'Flowering starts in 12 days · Next field check recommended tomorrow',
+                fieldOverview: 'Field overview', fieldDetails: 'View field details →', waterLevel: 'Water level', optimal: '● Optimal for today', cropStage: 'Crop stage', tillering: 'Tillering', nextRain: 'Next rain', tomorrow: 'Tomorrow', fieldHealth: 'Field health', good: 'Good', noIssues: 'No issues detected',
+                waterManager: 'Smart water manager', openControls: 'Open controls →', liveWater: 'Live water level', updated: 'Last updated 8 minutes ago', automatic: '● AUTOMATIC', centimetres: 'centimetres', recommended: 'Recommended', pump: 'Pump status', off: 'OFF', nextCheck: 'Next check', inTwo: 'In 2 hours', autoControl: 'Automatic control', on: 'ON', usage: 'Water usage', last7: 'Last 7 days · litres per day',
+                cropAlerts: 'Crop plan & alerts', calendar: 'See calendar →', kharif: 'Kharif crop calendar', onTrack: 'ON TRACK', nursery: 'Nursery preparation', done: 'Done', transplant: 'Transplanting', now: 'Now', flowering: 'Flowering', next: 'Next', advisories: "Today's advisories", personalised: 'Personalised for your crop stage', rainAlert: 'Rain expected tomorrow', rainText: 'Delay irrigation and save approximately 2,000 litres.', blastAlert: 'Scout for leaf blast', blastText: 'Check lower leaves after rainfall.', nitrogen: 'Keep nitrogen balanced', nitrogenText: 'Excess nitrogen can increase disease pressure.'
+            },
+            kn: {
+                nav: ['⌂ &nbsp; ಅವಲೋಕನ', '💧 &nbsp; ನೀರು ನಿರ್ವಹಣೆ', '🩺 &nbsp; ಭತ್ತ ವೈದ್ಯ', '☁ &nbsp; ಹವಾಮಾನ', '📅 &nbsp; ಬೆಳೆ ಕ್ಯಾಲೆಂಡರ್', '⚙ &nbsp; ಸೆಟ್ಟಿಂಗ್ಸ್'],
+                helpTitle: 'ತಜ್ಞರ ಸಹಾಯ ಬೇಕೇ?', helpText: 'ಪರಿಶೀಲಿಸಿದ ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ.', helpButton: 'ತಜ್ಞರನ್ನು ಕೇಳಿ →',
+                greeting: 'ಶುಭೋದಯ, ರವಿ 👋', field: 'ಇಂದಿನ ನಿಮ್ಮ ಹೊಲ', hero: 'ನಿಮ್ಮ ಬೆಳೆ ಆರೋಗ್ಯಕರವಾಗಿದೆ. ನೀರನ್ನು ಸ್ಥಿರವಾಗಿ ಇರಿಸಿ.', heroSub: 'ಹೂ ಬಿಡುವಿಕೆ 12 ದಿನಗಳಲ್ಲಿ · ನಾಳೆ ಹೊಲ ಪರಿಶೀಲಿಸಿ',
+                fieldOverview: 'ಹೊಲದ ಅವಲೋಕನ', fieldDetails: 'ಹೊಲದ ವಿವರಗಳನ್ನು ನೋಡಿ →', waterLevel: 'ನೀರಿನ ಮಟ್ಟ', optimal: '● ಇಂದಿಗೆ ಸೂಕ್ತವಾಗಿದೆ', cropStage: 'ಬೆಳೆಯ ಹಂತ', tillering: 'ಹೊಡೆಯುವ ಹಂತ', nextRain: 'ಮುಂದಿನ ಮಳೆ', tomorrow: 'ನಾಳೆ', fieldHealth: 'ಹೊಲದ ಆರೋಗ್ಯ', good: 'ಉತ್ತಮ', noIssues: 'ಯಾವುದೇ ಸಮಸ್ಯೆ ಪತ್ತೆಯಾಗಿಲ್ಲ',
+                waterManager: 'ಸ್ಮಾರ್ಟ್ ನೀರು ನಿರ್ವಹಣೆ', openControls: 'ನಿಯಂತ್ರಣ ತೆರೆಯಿರಿ →', liveWater: 'ನೀರಿನ ಪ್ರಸ್ತುತ ಮಟ್ಟ', updated: '8 ನಿಮಿಷಗಳ ಹಿಂದೆ ನವೀಕರಿಸಲಾಗಿದೆ', automatic: '● ಸ್ವಯಂಚಾಲಿತ', centimetres: 'ಸೆಂಟಿಮೀಟರ್', recommended: 'ಶಿಫಾರಸು', pump: 'ಪಂಪ್ ಸ್ಥಿತಿ', off: 'ಆಫ್', nextCheck: 'ಮುಂದಿನ ಪರಿಶೀಲನೆ', inTwo: '2 ಗಂಟೆಗಳಲ್ಲಿ', autoControl: 'ಸ್ವಯಂಚಾಲಿತ ನಿಯಂತ್ರಣ', on: 'ಆನ್', usage: 'ನೀರಿನ ಬಳಕೆ', last7: 'ಕಳೆದ 7 ದಿನಗಳು · ದಿನಕ್ಕೆ ಲೀಟರ್',
+                cropAlerts: 'ಬೆಳೆ ಯೋಜನೆ ಮತ್ತು ಎಚ್ಚರಿಕೆಗಳು', calendar: 'ಕ್ಯಾಲೆಂಡರ್ ನೋಡಿ →', kharif: 'ಮುಂಗಾರು ಬೆಳೆ ಕ್ಯಾಲೆಂಡರ್', onTrack: 'ಸರಿಯಾದ ಹಾದಿಯಲ್ಲಿ', nursery: 'ನರ್ಸರಿ ಸಿದ್ಧತೆ', done: 'ಮುಗಿದಿದೆ', transplant: 'ನಾಟಿ', now: 'ಈಗ', flowering: 'ಹೂ ಬಿಡುವಿಕೆ', next: 'ಮುಂದಿನದು', advisories: 'ಇಂದಿನ ಸಲಹೆಗಳು', personalised: 'ನಿಮ್ಮ ಬೆಳೆ ಹಂತಕ್ಕೆ ತಕ್ಕಂತೆ', rainAlert: 'ನಾಳೆ ಮಳೆಯ ನಿರೀಕ್ಷೆ', rainText: 'ನೀರಾವರಿ ಮುಂದೂಡಿ ಮತ್ತು ಸುಮಾರು 2,000 ಲೀಟರ್ ಉಳಿಸಿ.', blastAlert: 'ಎಲೆ ಅಂಗಮಾರಿಗಾಗಿ ಪರಿಶೀಲಿಸಿ', blastText: 'ಮಳೆಯ ನಂತರ ಕೆಳಗಿನ ಎಲೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.', nitrogen: 'ಸಮತೋಲಿತ ಸಾರಜನಕ ಬಳಸಿ', nitrogenText: 'ಹೆಚ್ಚಿನ ಸಾರಜನಕವು ಕೀಟ ಮತ್ತು ರೋಗದ ಒತ್ತಡ ಹೆಚ್ಚಿಸಬಹುದು.'
+            },
+            hi: {
+                nav: ['⌂ &nbsp; अवलोकन', '💧 &nbsp; पानी प्रबंधन', '🩺 &nbsp; धान डॉक्टर', '☁ &nbsp; मौसम', '📅 &nbsp; फसल कैलेंडर', '⚙ &nbsp; सेटिंग्स'],
+                helpTitle: 'विशेषज्ञ की मदद चाहिए?', helpText: 'सत्यापित कृषि विशेषज्ञ से जुड़ें।', helpButton: 'विशेषज्ञ से पूछें →',
+                greeting: 'सुप्रभात, रवि 👋', field: 'आज आपका खेत', hero: 'आपकी फसल स्वस्थ दिख रही है। पानी का स्तर स्थिर रखें।', heroSub: 'फूल आने में 12 दिन · कल खेत की जांच करें',
+                fieldOverview: 'खेत का अवलोकन', fieldDetails: 'खेत का विवरण देखें →', waterLevel: 'पानी का स्तर', optimal: '● आज के लिए सही', cropStage: 'फसल का चरण', tillering: 'कल्ले निकलना', nextRain: 'अगली बारिश', tomorrow: 'कल', fieldHealth: 'खेत का स्वास्थ्य', good: 'अच्छा', noIssues: 'कोई समस्या नहीं मिली',
+                waterManager: 'स्मार्ट पानी प्रबंधन', openControls: 'नियंत्रण खोलें →', liveWater: 'वर्तमान पानी का स्तर', updated: '8 मिनट पहले अपडेट किया गया', automatic: '● स्वचालित', centimetres: 'सेंटीमीटर', recommended: 'अनुशंसित', pump: 'पंप की स्थिति', off: 'बंद', nextCheck: 'अगली जांच', inTwo: '2 घंटे में', autoControl: 'स्वचालित नियंत्रण', on: 'चालू', usage: 'पानी का उपयोग', last7: 'पिछले 7 दिन · लीटर प्रति दिन',
+                cropAlerts: 'फसल योजना और चेतावनियां', calendar: 'कैलेंडर देखें →', kharif: 'खरीफ फसल कैलेंडर', onTrack: 'सही दिशा में', nursery: 'नर्सरी की तैयारी', done: 'पूरा', transplant: 'रोपाई', now: 'अभी', flowering: 'फूल आना', next: 'अगला', advisories: 'आज की सलाह', personalised: 'आपकी फसल के चरण के अनुसार', rainAlert: 'कल बारिश की संभावना', rainText: 'सिंचाई रोकें और लगभग 2,000 लीटर बचाएं।', blastAlert: 'लीफ ब्लास्ट की जांच करें', blastText: 'बारिश के बाद निचली पत्तियों की जांच करें।', nitrogen: 'नाइट्रोजन संतुलित रखें', nitrogenText: 'अधिक नाइट्रोजन से कीट और रोग का खतरा बढ़ सकता है।'
+            }
+        };
+
+        const operationsTranslations = {
+            en: {
+                heading: 'Field instructions & controls', safetyLink: 'Safety first', title: 'Irrigation instructions', sub: 'Simple steps for healthy paddy',
+                one: '<b>After transplanting:</b> Keep 2–3 cm water during the first week.', two: '<b>Vegetative stage:</b> Maintain about 5 cm and allow safe drying when suitable.', three: '<b>Flowering:</b> Do not allow water stress; check the field daily.', four: '<b>Before harvest:</b> Drain the field completely 10 days before harvest.',
+                borewell: 'Borewell control', borewellSub: 'Manual override for irrigation pump', offState: 'Borewell is OFF', offMessage: 'Pump stopped · safe to inspect', onState: 'Borewell is ON', onMessage: 'Pump running · monitor water level', turnOn: '▶ Turn ON', turnOff: '■ Turn OFF', safety: '⚠ Use ON only when water level is below target. Never run the pump dry. Keep the manual switch OFF during maintenance.',
+                ai: 'AI disease detection', aiSub: 'Automatic photo scanning for crop health', aiOff: 'AI detection is OFF', aiOffMessage: 'Turn on before taking a crop photo', aiOn: 'AI detection is ON', aiOnMessage: 'Ready to scan crop photos', aiSafety: '⚠ AI suggestions are only a first check. Confirm disease or pest symptoms with a qualified agronomist before treatment.'
+            },
+            kn: {
+                heading: 'ಹೊಲದ ಸೂಚನೆಗಳು ಮತ್ತು ನಿಯಂತ್ರಣಗಳು', safetyLink: 'ಸುರಕ್ಷತೆ ಮೊದಲು', title: 'ನೀರಾವರಿ ಸೂಚನೆಗಳು', sub: 'ಆರೋಗ್ಯಕರ ಭತ್ತಕ್ಕಾಗಿ ಸರಳ ಹಂತಗಳು',
+                one: '<b>ನಾಟಿಯ ನಂತರ:</b> ಮೊದಲ ವಾರ 2–3 ಸೆಂ.ಮೀ. ನೀರು ಇರಿಸಿ.', two: '<b>ಬೆಳೆಯುವ ಹಂತ:</b> ಸುಮಾರು 5 ಸೆಂ.ಮೀ. ನೀರು ಇರಿಸಿ ಮತ್ತು ಸೂಕ್ತವಾಗಿದ್ದರೆ ಒಣಗಲು ಬಿಡಿ.', three: '<b>ಹೂ ಬಿಡುವಿಕೆ:</b> ನೀರಿನ ಕೊರತೆ ಆಗದಂತೆ ಪ್ರತಿದಿನ ಹೊಲ ಪರಿಶೀಲಿಸಿ.', four: '<b>ಕೊಯ್ಲಿಗೆ ಮೊದಲು:</b> ಕೊಯ್ಲಿಗೆ 10 ದಿನಗಳ ಮುಂಚೆ ಹೊಲವನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ಒಣಗಿಸಿ.',
+                borewell: 'ಬೋರ್‌ವೆಲ್ ನಿಯಂತ್ರಣ', borewellSub: 'ನೀರಾವರಿ ಪಂಪ್‌ಗೆ ಕೈಯಿಂದ ನಿಯಂತ್ರಣ', offState: 'ಬೋರ್‌ವೆಲ್ ಆಫ್ ಇದೆ', offMessage: 'ಪಂಪ್ ನಿಂತಿದೆ · ಪರಿಶೀಲಿಸಲು ಸುರಕ್ಷಿತ', onState: 'ಬೋರ್‌ವೆಲ್ ಆನ್ ಇದೆ', onMessage: 'ಪಂಪ್ ಚಾಲನೆಯಲ್ಲಿದೆ · ನೀರಿನ ಮಟ್ಟ ಗಮನಿಸಿ', turnOn: '▶ ಆನ್ ಮಾಡಿ', turnOff: '■ ಆಫ್ ಮಾಡಿ', safety: '⚠ ನೀರಿನ ಮಟ್ಟ ಗುರಿಗಿಂತ ಕಡಿಮೆ ಇದ್ದಾಗ ಮಾತ್ರ ಆನ್ ಮಾಡಿ. ಪಂಪ್ ಅನ್ನು ನೀರಿಲ್ಲದೆ ಓಡಿಸಬೇಡಿ. ನಿರ್ವಹಣೆ ಸಮಯದಲ್ಲಿ ಕೈ ಸ್ವಿಚ್ ಆಫ್ ಇರಿಸಿ.',
+                ai: 'AI ರೋಗ ಪತ್ತೆ', aiSub: 'ಬೆಳೆಯ ಆರೋಗ್ಯಕ್ಕಾಗಿ ಸ್ವಯಂಚಾಲಿತ ಫೋಟೋ ಪರಿಶೀಲನೆ', aiOff: 'AI ಪತ್ತೆ ಆಫ್ ಇದೆ', aiOffMessage: 'ಬೆಳೆಯ ಫೋಟೋ ತೆಗೆಯುವ ಮೊದಲು ಆನ್ ಮಾಡಿ', aiOn: 'AI ಪತ್ತೆ ಆನ್ ಇದೆ', aiOnMessage: 'ಬೆಳೆಯ ಫೋಟೋ ಪರಿಶೀಲಿಸಲು ಸಿದ್ಧ', aiSafety: '⚠ AI ಸಲಹೆ ಮೊದಲ ಹಂತದ ಪರಿಶೀಲನೆ ಮಾತ್ರ. ಚಿಕಿತ್ಸೆಗೆ ಮೊದಲು ಕೃಷಿ ತಜ್ಞರಿಂದ ರೋಗ ಅಥವಾ ಕೀಟವನ್ನು ಖಚಿತಪಡಿಸಿ.'
+            },
+            hi: {
+                heading: 'खेत निर्देश और नियंत्रण', safetyLink: 'सुरक्षा पहले', title: 'सिंचाई निर्देश', sub: 'स्वस्थ धान के लिए आसान कदम',
+                one: '<b>रोपाई के बाद:</b> पहले सप्ताह 2–3 सेमी पानी रखें।', two: '<b>विकास चरण:</b> लगभग 5 सेमी पानी रखें और उचित होने पर खेत को सुरक्षित रूप से सूखने दें।', three: '<b>फूल आने पर:</b> पानी की कमी न होने दें; खेत की रोज जांच करें।', four: '<b>कटाई से पहले:</b> कटाई से 10 दिन पहले खेत का पानी पूरी तरह निकाल दें।',
+                borewell: 'बोरवेल नियंत्रण', borewellSub: 'सिंचाई पंप के लिए मैनुअल नियंत्रण', offState: 'बोरवेल बंद है', offMessage: 'पंप बंद · जांच के लिए सुरक्षित', onState: 'बोरवेल चालू है', onMessage: 'पंप चल रहा है · पानी का स्तर देखें', turnOn: '▶ चालू करें', turnOff: '■ बंद करें', safety: '⚠ पानी का स्तर लक्ष्य से कम होने पर ही चालू करें। पंप को बिना पानी के न चलाएं। रखरखाव के दौरान मैनुअल स्विच बंद रखें।',
+                ai: 'AI रोग पहचान', aiSub: 'फसल के स्वास्थ्य के लिए स्वचालित फोटो जांच', aiOff: 'AI पहचान बंद है', aiOffMessage: 'फसल की फोटो लेने से पहले चालू करें', aiOn: 'AI पहचान चालू है', aiOnMessage: 'फसल की फोटो जांचने के लिए तैयार', aiSafety: '⚠ AI सुझाव केवल पहली जांच हैं। उपचार से पहले योग्य कृषि विशेषज्ञ से रोग या कीट की पुष्टि करें।'
+            }
+        };
+
+        let borewellIsOn = false;
+        let aiDetectionIsOn = false;
+
+        function updateControlLabels(language) {
+            const t = operationsTranslations[language];
+            const borewellStatus = document.getElementById('borewellStatus');
+            borewellStatus.classList.toggle('on', borewellIsOn);
+            document.getElementById('borewellOn').classList.toggle('active', borewellIsOn);
+            document.getElementById('borewellOff').classList.toggle('active', !borewellIsOn);
+            document.getElementById('borewellState').textContent = borewellIsOn ? t.onState : t.offState;
+            document.getElementById('borewellMessage').textContent = borewellIsOn ? t.onMessage : t.offMessage;
+            const aiStatus = document.getElementById('aiStatus');
+            aiStatus.classList.toggle('on', aiDetectionIsOn);
+            document.getElementById('aiOn').classList.toggle('active', aiDetectionIsOn);
+            document.getElementById('aiOff').classList.toggle('active', !aiDetectionIsOn);
+            document.getElementById('aiState').textContent = aiDetectionIsOn ? t.aiOn : t.aiOff;
+            document.getElementById('aiMessage').textContent = aiDetectionIsOn ? t.aiOnMessage : t.aiOffMessage;
+        }
+
+        async function setBackendControl(endpoint, value, control) {
+            try {
+                const response = await fetch(apiUrl(endpoint), {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ enabled: value })
+                });
+                if (response.status === 401) {
+                    window.location.href = API_BASE + '/';
+                    return;
+                }
+                if (!response.ok) throw new Error('Backend rejected the request');
+                control(value);
+            } catch (error) {
+                console.error('Could not update backend control:', error);
+                alert('Backend is not reachable. Start server.py and try again.');
+            }
+        }
+
+        async function loadBackendState() {
+            try {
+                const response = await fetch(apiUrl('/api/state'), { credentials: 'include' });
+                if (response.status === 401) {
+                    window.location.href = API_BASE + '/';
+                    return;
+                }
+                if (!response.ok) throw new Error('State request failed');
+                const state = await response.json();
+                borewellIsOn = state.borewell_on;
+                aiDetectionIsOn = state.ai_detection_on;
+                districtSelect.value = state.district;
+                updateDistrictLabels(state.district);
+                updateControlLabels(languageSelect.value);
+            } catch (error) {
+                console.warn('Using local defaults; backend state is unavailable.');
+            }
+        }
+
+        function updateDistrictLabels(district) {
+            document.querySelector('.location label[for="districtSelect"]').title = district + ', Karnataka';
+            document.getElementById('calendarLocation').textContent = district + ' · Sona Masuri';
+        }
+
+        function updateCurrentDate() {
+            const language = languageSelect.value;
+            const locale = language === 'kn' ? 'kn-IN' : language === 'hi' ? 'hi-IN' : 'en-IN';
+            document.getElementById('currentDate').textContent = new Intl.DateTimeFormat(locale, {
+                weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+            }).format(new Date());
+        }
+
+        async function loadDistricts() {
+            try {
+                const response = await fetch(apiUrl('/api/districts'), { credentials: 'include' });
+                if (response.status === 401) {
+                    window.location.href = API_BASE + '/';
+                    return;
+                }
+                if (!response.ok) throw new Error('District request failed');
+                const data = await response.json();
+                districtSelect.innerHTML = data.districts.map(district => `<option value="${district}">${district}</option>`).join('');
+                await loadBackendState();
+            } catch (error) {
+                districtSelect.innerHTML = '<option value="Mandya">Mandya</option>';
+                updateDistrictLabels('Mandya');
+            }
+        }
+
+        async function selectDistrict(district) {
+            try {
+                const response = await fetch(apiUrl('/api/district'), {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ district })
+                });
+                if (response.status === 401) {
+                    window.location.href = API_BASE + '/';
+                    return;
+                }
+                if (!response.ok) throw new Error('District update failed');
+                updateDistrictLabels(district);
+            } catch (error) {
+                alert('Could not save district. Please check that the backend is running.');
+            }
+        }
+
+        async function loadFeature(feature) {
+            const panel = document.getElementById('featurePanel');
+            const title = document.getElementById('featureTitle');
+            const content = document.getElementById('featureContent');
+            const expertButton = document.getElementById('expertRequestButton');
+            panel.classList.add('visible');
+            expertButton.hidden = true;
+            content.textContent = 'Loading latest information…';
+            const routes = {
+                'water-manager': ['/api/water-manager', 'Water Manager'],
+                'paddy-doctor': ['/api/paddy-doctor', 'Paddy Doctor'],
+                'weather': ['/api/weather', 'Weather'],
+                'calendar': ['/api/calendar', 'Crop Calendar'],
+                'settings': ['/api/settings', 'Settings']
+            };
+            if (feature === 'overview') {
+                panel.classList.remove('visible');
+                return;
+            }
+            const route = routes[feature];
+            if (!route) return;
+            title.textContent = route[1];
+            try {
+                const response = await fetch(apiUrl(route[0]), { credentials: 'include' });
+                if (response.status === 401) {
+                    window.location.href = API_BASE + '/';
+                    return;
+                }
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Request failed');
+                if (feature === 'water-manager') {
+                    content.innerHTML = `Current water level: <b>${data.state.water_level_cm} cm</b>. ${data.instructions.map(item => `${item.stage}: ${item.water}`).join(' ')}`;
+                } else if (feature === 'paddy-doctor') {
+                    content.textContent = `AI detection is ${data.diagnosis_available ? 'ON' : 'OFF'}. Available checks: ${data.diseases.map(item => item.name).join(', ')}.`;
+                } else if (feature === 'weather') {
+                    content.innerHTML = `<b>${data.district}: ${data.prediction.category} rain risk (${data.prediction.probability}%)</b><br>${data.prediction.timing}; ${data.rainfall_mm} mm rainfall forecast for ${data.forecast_date}. ${data.advice}<br><small>Updated ${data.updated_at}. AI used ${data.humidity_percent}% humidity, ${data.cloud_cover_percent}% clouds, ${data.pressure_hpa} hPa pressure and ${data.wind_kph} km/h wind. Signals: ${data.prediction.factors.join(', ')}. Source: ${data.source}.</small>`;
+                    updateRainMetric(data);
+                } else if (feature === 'calendar') {
+                    content.textContent = `${data.district} ${data.season}: nursery ${data.nursery}; transplanting ${data.transplanting}; flowering ${data.flowering}; harvest ${data.harvest}.`;
+                } else {
+                    content.textContent = `Language: ${data.language}. Notifications: ${data.notifications ? 'ON' : 'OFF'}. Automatic irrigation: ${data.auto_irrigation ? 'ON' : 'OFF'}.`;
+                }
+            } catch (error) {
+                content.textContent = 'Could not load this feature. Please check that the backend is running.';
+            }
+        }
+
+        function updateRainMetric(data) {
+            const prediction = data.prediction;
+            document.getElementById('nextRainValue').textContent = prediction.category;
+            document.getElementById('nextRainDetails').textContent = `${prediction.probability}% chance · ${data.rainfall_mm} mm on ${data.forecast_date}`;
+        }
+
+        async function loadWeatherSummary() {
+            try {
+                const response = await fetch(apiUrl('/api/weather'), { credentials: 'include' });
+                if (response.status === 401) {
+                    window.location.href = API_BASE + '/';
+                    return;
+                }
+                if (!response.ok) throw new Error('Weather request failed');
+                updateRainMetric(await response.json());
+            } catch (error) {
+                document.getElementById('nextRainDetails').textContent = 'Weather service unavailable';
+            }
+        }
+
+        function renderDailyAdvisories() {
+            if (!dailyAdvisories) return;
+            const language = languageSelect.value;
+            const alerts = document.querySelectorAll('.lower .alert');
+            dailyAdvisories.items.forEach((item, index) => {
+                const localized = item[language] || item.en;
+                alerts[index].querySelector('b').textContent = localized.title;
+                alerts[index].querySelector('p').textContent = localized.text;
+            });
+            document.querySelector('.lower .card .sub').title = `Updated ${dailyAdvisories.date}`;
+        }
+
+        async function loadDailyAdvisories() {
+            try {
+                const response = await fetch(apiUrl('/api/advisories'), { credentials: 'include' });
+                if (response.status === 401) {
+                    window.location.href = API_BASE + '/';
+                    return;
+                }
+                if (!response.ok) throw new Error('Advisory request failed');
+                dailyAdvisories = await response.json();
+                renderDailyAdvisories();
+            } catch (error) {
+                console.warn('Daily advisories unavailable; showing default content.');
+            }
+        }
+
+        async function requestExpertHelp() {
+            const message = window.prompt('Describe your crop problem:');
+            if (!message) return;
+            const response = await fetch(apiUrl('/api/expert-requests'), {
+                method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            const data = await response.json();
+            alert(data.message || data.error);
+        }
+
+        function applyOperationsLanguage(language) {
+            const t = operationsTranslations[language];
+            document.getElementById('operationsHeading').textContent = t.heading;
+            document.querySelector('.operations').previousElementSibling.querySelector('a').textContent = t.safetyLink;
+            document.getElementById('instructionsTitle').textContent = t.title;
+            document.getElementById('instructionsSub').textContent = t.sub;
+            document.getElementById('instructionOne').innerHTML = t.one;
+            document.getElementById('instructionTwo').innerHTML = t.two;
+            document.getElementById('instructionThree').innerHTML = t.three;
+            document.getElementById('instructionFour').innerHTML = t.four;
+            document.getElementById('borewellTitle').textContent = t.borewell;
+            document.getElementById('borewellSub').textContent = t.borewellSub;
+            document.getElementById('borewellOn').textContent = t.turnOn;
+            document.getElementById('borewellOff').textContent = t.turnOff;
+            document.getElementById('borewellSafety').textContent = t.safety;
+            document.getElementById('aiTitle').textContent = t.ai;
+            document.getElementById('aiSub').textContent = t.aiSub;
+            document.getElementById('aiOn').textContent = t.turnOn;
+            document.getElementById('aiOff').textContent = t.turnOff;
+            document.getElementById('aiSafety').textContent = t.aiSafety;
+            updateControlLabels(language);
+        }
+
+        function applyLanguage(language) {
+            const t = translations[language];
+            document.documentElement.lang = language === 'kn' ? 'kn' : language;
+            document.querySelectorAll('nav button').forEach((button, index) => button.innerHTML = t.nav[index]);
+            document.querySelector('.help b').textContent = t.helpTitle;
+            document.querySelector('.help p').textContent = t.helpText;
+            document.querySelector('.help button').textContent = t.helpButton;
+            document.querySelector('h1').textContent = t.greeting;
+            document.querySelector('.hero .eyebrow').textContent = t.field;
+            document.querySelector('.hero h2').textContent = t.hero;
+            document.querySelector('.hero p:last-child').textContent = t.heroSub;
+            const headings = document.querySelectorAll('.heading');
+            headings[0].querySelector('h2').textContent = t.fieldOverview;
+            headings[0].querySelector('a').textContent = t.fieldDetails;
+            headings[1].querySelector('h2').textContent = t.waterManager;
+            headings[1].querySelector('a').textContent = t.openControls;
+            headings[2].querySelector('h2').textContent = t.cropAlerts;
+            headings[2].querySelector('a').textContent = t.calendar;
+            const metrics = document.querySelectorAll('.metric');
+            metrics[0].querySelector('label').textContent = t.waterLevel;
+            metrics[0].querySelector('.good').textContent = t.optimal;
+            metrics[1].querySelector('label').textContent = t.cropStage;
+            metrics[1].querySelector('strong').textContent = t.tillering;
+            metrics[2].querySelector('label').textContent = t.nextRain;
+            metrics[2].querySelector('strong').textContent = t.tomorrow;
+            metrics[3].querySelector('label').textContent = t.fieldHealth;
+            metrics[3].querySelector('strong').textContent = t.good;
+            metrics[3].querySelector('.good').textContent = t.noIssues;
+            const cards = document.querySelectorAll('.twocol .card');
+            cards[0].querySelector('h3').textContent = t.liveWater;
+            cards[0].querySelector('.sub').textContent = t.updated;
+            cards[0].querySelector('.status').textContent = t.automatic;
+            cards[0].querySelector('.ring small').textContent = t.centimetres;
+            const facts = cards[0].querySelectorAll('.facts p');
+            [t.recommended, t.pump, t.nextCheck, t.autoControl].forEach((value, index) => facts[index].querySelector('span').textContent = value);
+            facts[1].querySelector('b').textContent = t.off;
+            facts[2].querySelector('b').textContent = t.inTwo;
+            facts[3].querySelector('b').textContent = t.on;
+            cards[1].querySelector('h3').textContent = t.usage;
+            cards[1].querySelector('.sub').textContent = t.last7;
+            const lowerCards = document.querySelectorAll('.lower .card');
+            lowerCards[0].querySelector('h3').textContent = t.kharif;
+            lowerCards[0].querySelector('.status').textContent = t.onTrack;
+            const stages = lowerCards[0].querySelectorAll('.stage');
+            [t.nursery, t.transplant, t.tillering, t.flowering].forEach((value, index) => stages[index].querySelector('b').textContent = value);
+            [t.done, t.done, t.now, t.next].forEach((value, index) => stages[index].querySelector('small:last-child').textContent = value);
+            lowerCards[1].querySelector('h3').textContent = t.advisories;
+            lowerCards[1].querySelector('.sub').textContent = t.personalised;
+            const alerts = lowerCards[1].querySelectorAll('.alert');
+            [t.rainAlert, t.blastAlert, t.nitrogen].forEach((value, index) => alerts[index].querySelector('b').textContent = value);
+            [t.rainText, t.blastText, t.nitrogenText].forEach((value, index) => alerts[index].querySelector('p').textContent = value);
+            applyOperationsLanguage(language);
+            renderDailyAdvisories();
+            localStorage.setItem('paddyMitraLanguage', language);
+        }
+
+        const languageSelect = document.getElementById('languageSelect');
+        const districtSelect = document.getElementById('districtSelect');
+        languageSelect.addEventListener('change', event => {
+            applyLanguage(event.target.value);
+            updateCurrentDate();
+        });
+        districtSelect.addEventListener('change', event => {
+            selectDistrict(event.target.value);
+            loadWeatherSummary();
+        });
+        document.querySelectorAll('nav button').forEach(button => button.addEventListener('click', () => {
+            document.querySelectorAll('nav button').forEach(item => item.classList.remove('active'));
+            button.classList.add('active');
+            loadFeature(button.dataset.feature);
+        }));
+        document.getElementById('expertHelpButton').addEventListener('click', requestExpertHelp);
+        document.getElementById('expertRequestButton').addEventListener('click', requestExpertHelp);
+        const savedLanguage = localStorage.getItem('paddyMitraLanguage') || 'en';
+        languageSelect.value = savedLanguage;
+        applyLanguage(savedLanguage);
+        updateCurrentDate();
+        window.setInterval(updateCurrentDate, 60 * 1000);
+        document.getElementById('borewellOn').addEventListener('click', () => {
+            setBackendControl('/api/borewell', true, value => {
+                borewellIsOn = value;
+                updateControlLabels(languageSelect.value);
+            });
+        });
+        document.getElementById('borewellOff').addEventListener('click', () => {
+            setBackendControl('/api/borewell', false, value => {
+                borewellIsOn = value;
+                updateControlLabels(languageSelect.value);
+            });
+        });
+        document.getElementById('aiOn').addEventListener('click', () => {
+            setBackendControl('/api/ai-detection', true, value => {
+                aiDetectionIsOn = value;
+                updateControlLabels(languageSelect.value);
+            });
+        });
+        document.getElementById('aiOff').addEventListener('click', () => {
+            setBackendControl('/api/ai-detection', false, value => {
+                aiDetectionIsOn = value;
+                updateControlLabels(languageSelect.value);
+            });
+        });
+        loadDistricts();
+        loadWeatherSummary();
+        window.setInterval(loadWeatherSummary, 10 * 60 * 1000);
+        loadDailyAdvisories();
+    </script>
+</body>
+
+</html>
