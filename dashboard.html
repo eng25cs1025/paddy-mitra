@@ -819,6 +819,14 @@
     <script>
         const API_BASE = '';
         const apiUrl = path => API_BASE + path;
+        async function readJson(response) {
+            const raw = await response.text();
+            try {
+                return JSON.parse(raw);
+            } catch {
+                throw new Error(`Server returned invalid JSON (${response.status}). Refresh the page or restart the server.`);
+            }
+        }
         let dailyAdvisories = null;
         let installPrompt = null;
         const installButton = document.getElementById('installButton');
@@ -956,7 +964,7 @@
                     return;
                 }
                 if (!response.ok) throw new Error('State request failed');
-                const state = await response.json();
+                const state = await readJson(response);
                 borewellIsOn = state.borewell_on;
                 aiDetectionIsOn = state.ai_detection_on;
                 districtSelect.value = state.district;
@@ -988,7 +996,7 @@
                     return;
                 }
                 if (!response.ok) throw new Error('District request failed');
-                const data = await response.json();
+                const data = await readJson(response);
                 districtSelect.innerHTML = data.districts.map(district => `<option value="${district}">${district}</option>`).join('');
                 await loadBackendState();
             } catch (error) {
@@ -1044,7 +1052,7 @@
                     window.location.href = API_BASE + '/';
                     return;
                 }
-                const data = await response.json();
+                const data = await readJson(response);
                 if (!response.ok) throw new Error(data.error || 'Request failed');
                 if (feature === 'water-manager') {
                     content.innerHTML = `Current water level: <b>${data.state.water_level_cm} cm</b>. ${data.instructions.map(item => `${item.stage}: ${item.water}`).join(' ')}`;
@@ -1077,7 +1085,7 @@
                     return;
                 }
                 if (!response.ok) throw new Error('Weather request failed');
-                updateRainMetric(await response.json());
+                updateRainMetric(await readJson(response));
             } catch (error) {
                 document.getElementById('nextRainDetails').textContent = 'Weather service unavailable';
             }
@@ -1103,7 +1111,7 @@
                     return;
                 }
                 if (!response.ok) throw new Error('Advisory request failed');
-                dailyAdvisories = await response.json();
+                dailyAdvisories = await readJson(response);
                 renderDailyAdvisories();
             } catch (error) {
                 console.warn('Daily advisories unavailable; showing default content.');
@@ -1117,7 +1125,7 @@
                 method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message })
             });
-            const data = await response.json();
+            const data = await readJson(response);
             alert(data.message || data.error);
         }
 

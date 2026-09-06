@@ -159,7 +159,13 @@
             error.style.display = 'none';
             try {
                 const response = await fetch(API_BASE + '/api/login', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: document.getElementById('username').value.trim(), password: document.getElementById('password').value }) });
-                const data = await response.json();
+                const raw = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(raw);
+                } catch {
+                    throw new Error(`Server returned an invalid response (${response.status}). Open the app URL directly and refresh.`);
+                }
                 if (!response.ok) throw new Error(data.error || 'Login failed');
                 window.location.href = window.location.protocol === 'file:' ? API_BASE + data.redirect : data.redirect;
             } catch (err) {
