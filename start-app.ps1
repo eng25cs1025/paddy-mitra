@@ -63,24 +63,37 @@ if ($Public) {
     $tunnelErrorLog = Join-Path $projectRoot 'public-tunnel-error.log'
     Remove-Item $tunnelLog -Force -ErrorAction SilentlyContinue
     Remove-Item $tunnelErrorLog -Force -ErrorAction SilentlyContinue
-    Write-Host 'Starting secure public HTTPS tunnel...' -ForegroundColor Yellow
-    $tunnelProcess = Start-Process -FilePath $npx.Source -ArgumentList '--yes localtunnel --port 8000' -WorkingDirectory $projectRoot -RedirectStandardOutput $tunnelLog -RedirectStandardError $tunnelErrorLog -WindowStyle Hidden -PassThru
     $publicUrl = $null
-    for ($attempt = 0; $attempt -lt 30; $attempt++) {
-        Start-Sleep -Seconds 1
-        if (Test-Path $tunnelLog) {
-            $match = Select-String -Path $tunnelLog -Pattern 'https://[^\s]+' | Select-Object -First 1
-            if ($match) {
-                $publicUrl = $match.Matches[0].Value.TrimEnd('.')
-                break
+    for ($retry = 1; $retry -le 3 -and $null -eq $publicUrl; $retry++) {
+        Remove-Item $tunnelLog -Force -ErrorAction SilentlyContinue
+        Remove-Item $tunnelErrorLog -Force -ErrorAction SilentlyContinue
+        Write-Host "Starting secure public HTTPS tunnel (attempt $retry of 3)..." -ForegroundColor Yellow
+        $tunnelProcess = Start-Process -FilePath $npx.Source -ArgumentList '--yes localtunnel --port 8000' -WorkingDirectory $projectRoot -RedirectStandardOutput $tunnelLog -RedirectStandardError $tunnelErrorLog -WindowStyle Hidden -PassThru
+        for ($attempt = 0; $attempt -lt 30; $attempt++) {
+            Start-Sleep -Seconds 1
+            if (Test-Path $tunnelLog) {
+                $match = Select-String -Path $tunnelLog -Pattern 'https://[^\s]+' | Select-Object -First 1
+                if ($match) {
+                    $candidate = $match.Matches[0].Value.TrimEnd('.')
+                    try {
+                        $probe = Invoke-WebRequest -UseBasicParsing "$candidate/" -TimeoutSec 5
+                        if ($probe.StatusCode -eq 200) {
+                            $publicUrl = $candidate
+                            break
+                        }
+                    }
+                    catch {
+                        if ($tunnelProcess.HasExited) { break }
+                    }
+                }
             }
+        }
+        if ($null -eq $publicUrl -and -not $tunnelProcess.HasExited) {
+            Stop-Process -Id $tunnelProcess.Id -Force -ErrorAction SilentlyContinue
         }
     }
     if ($null -eq $publicUrl) {
-        if ($tunnelProcess.HasExited) {
-            throw 'The public tunnel stopped before creating a URL. Check public-tunnel.log and public-tunnel-error.log.'
-        }
-        throw 'The public tunnel did not start. Check public-tunnel.log.'
+        throw 'The public tunnel could not be verified after 3 attempts. Local access still works; deploy to Render for a stable public URL.'
     }
     $openUrl = "$publicUrl/"
     Start-Process $openUrl
